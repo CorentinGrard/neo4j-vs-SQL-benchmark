@@ -2,18 +2,25 @@ import json
 
 
 class Personne:
-    def __init__(self, prenom, nom):
+    def __init__(self, id, prenom, nom):
+        self.id = id
         self.prenom = prenom
         self.nom = nom
 
-    def toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
-
 
 class Produit:
-    def __init__(self, nom, prix):
+    def __init__(self, id, nom, prix):
+        self.id = id
         self.nom = nom
         self.prix = prix
 
-    def toJson(self):
-        return json.dumps(self, default=lambda o: o.__dict__)
+class Achat:
+    def __init__(self, id, idProduit, idPersonne):
+        self.id = id
+        self.idProduit = idProduit
+        self.idPersonne = idPersonne
+
+class Follow:
+    def __init__(self, idFollower, idFollowed):
+        self.idFollower = idFollower
+        self.idFollowed = idFollowed
