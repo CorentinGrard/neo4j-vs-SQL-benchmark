@@ -17,6 +17,7 @@ if __name__ == "__main__":
     # Init connection
     neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
     postgre = PostgreDatabase("bolt://localhost:7687", "neo4j", "admin", )
+
     # Clear database   
     neo4j.clearDatabase()
 
@@ -80,6 +81,7 @@ if __name__ == "__main__":
 
     neo4j.createFollows(follows)
     postgre.createFollows(follows)
+
     # Close sockets
     postgre.close()
     neo4j.close()
