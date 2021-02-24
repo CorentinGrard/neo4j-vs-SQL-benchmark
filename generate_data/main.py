@@ -12,6 +12,9 @@ if __name__ == "__main__":
     # Init connection
     neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
     postgre = PostgreDatabase("bolt://localhost:7687", "neo4j", "admin", )
+    # Clear database   
+    neo4j.clearDatabase()
+
     # Generate data
     # Generate personnes
     personnes = []
@@ -35,7 +38,7 @@ if __name__ == "__main__":
         produit = Produit(nomProduit, prix)
         produits.append(produit)
 
-    # Neo4jDatabase.createProduits(produits)
+    neo4j.createProduits(produits)
     # PostgreDatabase.createProduits(produits)
 
     # Generate achats

@@ -13,19 +13,28 @@ class Neo4jDatabase:
         print("Neo4j closed")
 
     def createPersonnes(self, personnes):
-        data = {
-            'props': []
-        }
+        data = []
         for personne in personnes:
-            data["props"].append({"prenom": personne.prenom, "nom": personne.nom})
+            data.append({"prenom": personne.prenom, "nom": personne.nom})
         with self.driver.session() as session:
-            result = session.write_transaction(self._create_personnes, data)
-            print(result)
-
-    @staticmethod
-    def _create_personnes(tx, data):
-        result = tx.run(
-            "UNWIND $props AS map"
+            result = session.write_transaction(lambda tx: list(tx.run(
+            "UNWIND $props AS map "
             "CREATE (n:Personne) SET n = map",
-            props=data)
-        return result
+            { "props": data})))
+    
+    def createProduits(self, produits):
+        data = []
+        for produit in produits:
+            data.append({"prix": produit.prix, "nom": produit.nom})
+        with self.driver.session() as session:
+            result = session.write_transaction(lambda tx: list(tx.run(
+            "UNWIND $props AS map "
+            "CREATE (n:Produits) SET n = map",
+            { "props": data})))
+
+    def clearDatabase(self):
+        with self.driver.session() as session:
+            result = session.write_transaction(lambda tx: list(tx.run(
+                "MATCH (n) "
+                "DELETE n"
+                )))
