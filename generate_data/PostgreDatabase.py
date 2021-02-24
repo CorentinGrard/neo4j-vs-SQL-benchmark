@@ -30,5 +30,13 @@ class PostgreDatabase:
         print('Database Postgre connection closed.')
 
     def createPersonnes(self, personnes):
+        cur = self.driver.cursor()
         for personne in personnes:
-            self.driver.cursor().execute("INSERT INTO personne (c1, c2) VALUES(%s, %s)", (personne.nom, personne.prenom))
+            cur.execute("INSERT INTO personne (first_name, last_name) VALUES(%s, %s)", (personne.nom, personne.prenom))
+            self.driver.commit()
+
+    def createProduits(self, produits):
+        cur = self.driver.cursor()
+        for produit in produits:
+            cur.execute("INSERT INTO produit (name, price) VALUES(%s, %s)", (produit.nom, produit.prix))
+            self.driver.commit()

@@ -10,7 +10,7 @@ from random_word import RandomWords
 
 if __name__ == "__main__":
     # Init connection
-    neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
+    #neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
     postgre = PostgreDatabase("bolt://localhost:7687", "neo4j", "admin", )
     # Generate data
     # Generate personnes
@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     
     postgre.createPersonnes(personnes)
-    neo4j.createPersonnes(personnes)
+    #neo4j.createPersonnes(personnes)
     
     # Generate produits
     r = RandomWords()
@@ -36,11 +36,11 @@ if __name__ == "__main__":
         produits.append(produit)
 
     # Neo4jDatabase.createProduits(produits)
-    # PostgreDatabase.createProduits(produits)
+    postgre.createProduits(produits)
 
     # Generate achats
 
     # Generate follow
 
     postgre.close()
-    neo4j.close()
+    #neo4j.close()
