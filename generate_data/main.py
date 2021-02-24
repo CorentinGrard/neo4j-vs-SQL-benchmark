@@ -50,11 +50,13 @@ if __name__ == "__main__":
 
     # Generate achats
     achats = []
+    j = 0
     for personne in personnes:
         nbAchats = random.randint(0, 5)
         for i in range(0, nbAchats):
             produit = produits[random.randint(0, nombreProduits -1)]
-            achat = Achat(id, produit.id, personne.id)
+            achat = Achat(j, produit.id, personne.id)
+            j += 1
             achats.append(achat)
 
     neo4j.createAchats(achats)
@@ -62,15 +64,22 @@ if __name__ == "__main__":
     
     # Generate follow
     follows = []
+    banList = []
     for myPersonne in personnes:
         nbFollow = random.randint(0, 20)
         for i in range(0, nbFollow):
-            personneToFollow = personnes[random.randint(0, nombrePersonnes -1)]
-            follow = Follow(myPersonne.id, personneToFollow.id)
+            personneToFollow = random.randint(0, nombrePersonnes -1)
+            if personneToFollow in banList:
+                i -= i 
+                continue
+            banList.append(personneToFollow)
+            
+            follow = Follow(myPersonne.id, personneToFollow)
             follows.append(follow)
+        banList = []
 
     neo4j.createFollows(follows)
     postgre.createFollows(follows)
     # Close sockets
     postgre.close()
-    #neo4j.close()
+    neo4j.close()
