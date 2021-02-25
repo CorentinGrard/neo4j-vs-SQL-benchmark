@@ -3,13 +3,14 @@ version: '3.1'
 services:
 
   db:
-    image: postgres
+    image: postgres:13-alpine
     restart: unless-stopped
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: database
     volumes:
+      - ./init_postgres.sql:/docker-entrypoint-initdb.d/init_postgres.sql
       - postgres-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
@@ -24,7 +25,9 @@ services:
     image: neo4j:4.2
     restart: unless-stopped
     volumes:
-      - neo4j-data:/data 
+      - neo4j-data:/data
+    environment:
+      - NEO4J_AUTH=neo4j/admin
     ports:
       - 7474:7474
       - 7687:7687
