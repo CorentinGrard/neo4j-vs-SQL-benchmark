@@ -5,13 +5,11 @@
 4) Faire les requetes de recherche en statique
 5) Faire les requetes de recherche en dynamique
 
-²
-Obtenir la liste et le nombre des produits commandés par les cercles de followersd’un individu (niveau 1, ..., niveau n)cette requête permet d’observer le rôle d’influenceur d’un individu au sein du réseau social pour le déclenchement d’achats
+Obtenir la liste et le nombre des produits commandés par les cercles de followers d’un individu (niveau 1, ..., niveau n)
 
 Même requête mais avec spécification d’un produit particuliercette requête permet d’observer le rôle d’influenceur d’un individusuite à un «post» mentionnant un article spécifique
 
-
-Pour une référence de produit donné, obtenir le nombre de personnes l’ayant commandé dans un cercle de followers«orienté» de niveau n (à effectuer sur plusieurs niveaux: 0, 1, 2 ...)permet de rechercherles produits «viraux», c’est-à-dire ceux qui se vendent le plus au sein de groupes de followers par opposition aux achats isolés pour lesquels le groupe social n’a pas d’impact
+Pour une référence de produit donné, obtenir le nombre de personnes l’ayant commandé dans un cercle de followers«orienté» de niveau n (à effectuer sur plusieurs niveaux: 0, 1, 2 ...)
 
 
 ./cli.py search -o Personne -p nom=Patrick -d postgres

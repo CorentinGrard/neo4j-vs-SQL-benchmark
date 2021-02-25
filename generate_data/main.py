@@ -8,8 +8,8 @@ import random
 from random_word import RandomWords
 
 if __name__ == "__main__":
-    nombrePersonnes = 10000
-    nombreProduits = 10000
+    nombrePersonnes = 1000
+    nombreProduits = 1000
 
     # Init connection
     neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
@@ -17,6 +17,7 @@ if __name__ == "__main__":
 
     # Clear database
     neo4j.clearDatabase()
+    postgre.clear_database()
 
     # Generate data
     # Generate personnes

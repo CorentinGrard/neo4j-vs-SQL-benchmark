@@ -1,4 +1,4 @@
-import psycopg2
+²²²²²²²²²²²²²²²²²²²²²²²²²import psycopg2
 from time import time
 
 
@@ -14,25 +14,9 @@ class PostgreDatabase:
             # create a cursor
             cur = self.driver.cursor()
 
-            # execute a statement
-            print('PostgreSQL database version:')
-            cur.execute('SELECT version()')
-
-            # display the PostgreSQL database server version
-            db_version = cur.fetchone()
-            print(db_version)
 
             # close the communication with the PostgreSQL
             cur.close()
-            cur = self.driver.cursor()
-            # Clean all
-            cur.execute('TRUNCATE personne CASCADE')
-
-            cur.execute('TRUNCATE produit CASCADE')
-
-            cur.execute('TRUNCATE achat CASCADE')
-
-            cur.execute('TRUNCATE follower CASCADE')
 
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
@@ -40,6 +24,14 @@ class PostgreDatabase:
     def close(self):
         self.driver.close()
         print('Database Postgre connection closed.')
+
+    def clear_database(self):
+        cur = self.driver.cursor()
+        # Clean all
+        cur.execute('TRUNCATE personne CASCADE')
+        cur.execute('TRUNCATE produit CASCADE')
+        cur.execute('TRUNCATE achat CASCADE')
+        cur.execute('TRUNCATE follower CASCADE')
 
     def createPersonnes(self, personnes):
         print("\tPOSTGRES | create personne")
@@ -50,6 +42,7 @@ class PostgreDatabase:
                 "INSERT INTO personne (id, first_name, last_name) VALUES(%s, %s, %s)",
                 (personne.id, personne.nom, personne.prenom))
         self.driver.commit()
+        cur.close()
         toc = time()
         print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
 
@@ -62,6 +55,7 @@ class PostgreDatabase:
                 "INSERT INTO produit (id_produit, name, price) VALUES(%s, %s, %s)",
                 (produit.id, produit.nom, produit.prix))
         self.driver.commit()
+        cur.close()
         toc = time()
         print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
 
@@ -74,6 +68,7 @@ class PostgreDatabase:
                 "INSERT INTO achat (id_achat, id_produit, id_personne) VALUES(%s, %s, %s)",
                 (achat.id, achat.idProduit, achat.idPersonne))
         self.driver.commit()
+        cur.close()
         toc = time()
         print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
 
@@ -86,5 +81,24 @@ class PostgreDatabase:
                 "INSERT INTO follower (id_follower, id_followed) VALUES(%s, %s)",
                 (follow.idFollower, follow.idFollowed))
         self.driver.commit()
+        cur.close()
         toc = time()
         print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+
+    def list_achat_products_followers(self, personneID, depth):
+        print("\tPOSTGRES | list_achat_products_followers")
+        tic = time()
+        cur = self.driver.cursor()
+        
+        request = "SELECT id_followed FROM follower WHERE id_follower = %s"
+        for i in range(1, depth):
+            request = "SELECT DISTINCT id_followed FROM follower WHERE id_follower IN (" + request + ")"
+        request = "SELECT id_produit, count(id_produit) FROM achat where id_personne IN (" + request + ") GROUP BY id_produit"
+        
+        cur.execute(request, (personneID,))
+        followers_produit = cur.fetchall()
+        
+        cur.close()
+        toc = time()
+        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        return followers_produit

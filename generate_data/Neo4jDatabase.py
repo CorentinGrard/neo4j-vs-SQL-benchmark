@@ -1,4 +1,4 @@
-# from neo4j import GraphDatabase
+²²²²²²²²²²²²²²# from neo4j import GraphDatabase
 import neo4j
 import json
 from time import time
@@ -13,6 +13,14 @@ class Neo4jDatabase:
         self.driver.close()
         print("Neo4j closed")
 
+    # Génération
+
+    def clearDatabase(self):
+        with self.driver.session() as session:
+            session.write_transaction(
+                lambda tx: list(tx.run("MATCH (n) "
+                                       "DETACH DELETE n")))
+
     def createPersonnes(self, personnes):
         print("\tNEO4J | create personne")
         data = []
@@ -24,7 +32,7 @@ class Neo4jDatabase:
             })
         tic = time()
         with self.driver.session() as session:
-            result = session.write_transaction(lambda tx: list(
+            session.write_transaction(lambda tx: list(
                 tx.run(
                     "UNWIND $props AS map "
                     "CREATE (n:Personne) SET n = map", {"props": data})))
@@ -42,18 +50,12 @@ class Neo4jDatabase:
             })
         tic = time()
         with self.driver.session() as session:
-            result = session.write_transaction(lambda tx: list(
+            session.write_transaction(lambda tx: list(
                 tx.run(
                     "UNWIND $props AS map "
                     "CREATE (n:Produit) SET n = map", {"props": data})))
         toc = time()
         print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
-
-    def clearDatabase(self):
-        with self.driver.session() as session:
-            result = session.write_transaction(
-                lambda tx: list(tx.run("MATCH (n) "
-                                       "DETACH DELETE n")))
 
     def createAchats(self, achats):
         print("\tNEO4J | create achat")
@@ -64,13 +66,14 @@ class Neo4jDatabase:
                 "idProduit": achat.idProduit,
             })
         tic = time()
-        with self.driver.session() as session:
-            result = session.write_transaction(lambda tx: list(
-                tx.run(
-                    "UNWIND $props AS row "
-                    "MATCH (a:Personne), (b:Produit) "
-                    "WHERE a.id = row.idPersonne AND b.id = row.idProduit "
-                    "CREATE (a)-[r:Achat]->(b)", {"props": data})))
+        for pos in range(0, len(data), 1000):
+            with self.driver.session() as session:
+                session.write_transaction(lambda tx: list(
+                    tx.run(
+                        "UNWIND $props AS row "
+                        "MATCH (a:Personne), (b:Produit) "
+                        "WHERE a.id = row.idPersonne AND b.id = row.idProduit "
+                        "CREATE (a)-[r:Achat]->(b)", {"props": data[pos:pos + 1000]})))
         toc = time()
         print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
 
@@ -83,12 +86,65 @@ class Neo4jDatabase:
                 "idFollowed": follow.idFollowed,
             })
         tic = time()
+        for pos in range(0, len(data), 1000):
+            with self.driver.session() as session:
+                session.write_transaction(lambda tx: list(
+                    tx.run(
+                        "UNWIND $props AS row "
+                        "MATCH (a:Personne), (b:Personne) "
+                        "WHERE a.id = row.idFollower AND b.id = row.idFollowed "
+                        "CREATE (a)-[r:Follow]->(b)", {"props": data[pos:pos + 1000]})))
+        toc = time()
+        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+
+    # Search
+
+    def list_achat_products_followers(self, idPersonne, profondeur):
+        print("\tNEO4J | list_achat_products_followers")
+        tic = time()
         with self.driver.session() as session:
             result = session.write_transaction(lambda tx: list(
                 tx.run(
-                    "UNWIND $props AS row "
-                    "MATCH (a:Personne), (b:Personne) "
-                    "WHERE a.id = row.idFollower AND b.id = row.idFollowed "
-                    "CREATE (a)-[r:Follow]->(b)", {"props": data})))
+                    "MATCH (a:Personne{id:$idPersonne})-[:Follow*.." + str(
+                        profondeur) + "]->(b:Personne)-[:Achat]->(p:Produit) "
+                    "WITH DISTINCT b, p ORDER BY p.id "
+                    "RETURN p.id, COUNT(b)", {
+                        "idPersonne": idPersonne,
+                    })))
         toc = time()
+        # print(result)
+        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+
+    def list_achat_products_specific_followers(self, idPersonne, idProduit, profondeur):
+        print("\tNEO4J | list_achat_products_specific_followers")
+        tic = time()
+        with self.driver.session() as session:
+            result = session.write_transaction(lambda tx: list(
+                tx.run(
+                    "MATCH (a:Personne{id:$idPersonne})-[:Follow*.." + str(
+                        profondeur) +
+                    "]->(b:Personne)-[:Achat]->(p:Produit{id:$idProduit}) "
+                    "WITH DISTINCT b, p ORDER BY p.id "
+                    "RETURN p.id, COUNT(b)", {
+                        "idPersonne": idPersonne,
+                        "idProduit": idProduit,
+                    })))
+        toc = time()
+        print(result)
+        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+
+    def nb_achat_produit(self, idProduit, profondeur):
+        print("\tNEO4J | nb_achat_produit")
+        tic = time()
+        with self.driver.session() as session:
+            result = session.write_transaction(lambda tx: list(
+                tx.run(
+                    "MATCH (p:Produit{id:1})<-[:Achat]-(a:Personne)<-[:Follow*.."
+                    + str(profondeur) + "]-(b:Personne) "
+                    "WITH DISTINCT b "
+                    "RETURN COUNT(b)", {
+                        "idProduit": idProduit,
+                    })))
+        toc = time()
+        print(result)
         print("\t\tTemps d'exécution : " + str(toc - tic) + " s")

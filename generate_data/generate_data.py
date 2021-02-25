@@ -69,7 +69,10 @@ def generate_follow(personnes, nombrePersonnes):
         for i in range(0, nbFollow):
             personneToFollow = random.randint(0, nombrePersonnes - 1)
             if personneToFollow in banList:
-                i -= i
+                i -= 1
+                continue
+            elif personneToFollow == myPersonne.id:
+                i -= 1
                 continue
             banList.append(personneToFollow)
 
