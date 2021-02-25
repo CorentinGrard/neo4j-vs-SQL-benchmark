@@ -1,6 +1,6 @@
-²²²²²²²²²²²²²²²²²²²²²²²²²import psycopg2
+import psycopg2
 from time import time
-
+from pprint import pprint
 
 class PostgreDatabase:
     def __init__(self, dbname, user, password, host):
@@ -87,18 +87,50 @@ class PostgreDatabase:
 
     def list_achat_products_followers(self, personneID, depth):
         print("\tPOSTGRES | list_achat_products_followers")
+        
+        request = "SELECT id_followed FROM follower WHERE id_follower = %s"
+        for i in range(1, depth):
+            request = "SELECT DISTINCT id_followed FROM follower WHERE id_follower IN (" + request + ")"
+        request = "SELECT id_produit, count(id_produit) FROM achat WHERE id_personne IN (" + request + ") GROUP BY id_produit"
+        tic = time()
+        cur = self.driver.cursor()
+        cur.execute(request, (personneID,))
+        followers_produit = cur.fetchall()
+        cur.close()
+        toc = time()
+        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        return followers_produit
+
+    def list_achat_products_specific_followers(self, personneID, idProduit, depth):
+        print("\tPOSTGRES | list_achat_products_specific_followers")
+        request = "SELECT id_followed FROM follower WHERE id_follower = %s"
+        for i in range(1, depth):
+            request = "SELECT DISTINCT id_followed FROM follower WHERE id_follower IN (" + request + ")"
+        request = "SELECT id_produit, count(id_produit) FROM achat WHERE id_produit = %s and id_personne IN (" + request + ") GROUP BY id_produit"
+        tic = time()
+        cur = self.driver.cursor()
+        cur.execute(request, (idProduit,personneID,))
+        produit = cur.fetchall()
+        pprint(produit)
+        cur.close()
+        toc = time()
+        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        return produit
+    
+    def list_achat_products_specific_followers(self, personneID, idProduit, depth):
+        print("\tPOSTGRES | list_achat_products_specific_followers")
         tic = time()
         cur = self.driver.cursor()
         
         request = "SELECT id_followed FROM follower WHERE id_follower = %s"
         for i in range(1, depth):
             request = "SELECT DISTINCT id_followed FROM follower WHERE id_follower IN (" + request + ")"
-        request = "SELECT id_produit, count(id_produit) FROM achat where id_personne IN (" + request + ") GROUP BY id_produit"
+        request = "SELECT id_produit, count(id_produit) FROM achat WHERE id_produit = %s and id_personne IN (" + request + ") GROUP BY id_produit"
         
-        cur.execute(request, (personneID,))
-        followers_produit = cur.fetchall()
-        
+        cur.execute(request, (idProduit,personneID,))
+        produit = cur.fetchall()
+        pprint(produit)
         cur.close()
         toc = time()
         print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
-        return followers_produit
+        return produit

@@ -18,7 +18,7 @@ neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
 postgre = PostgreDatabase("database", "admin", "admin", "localhost")
 
 list_achat_products_followers()
-# list_achat_products_specific_followers()
+list_achat_products_specific_followers()
 # nb_achat_produit()
 
 # Close sockets

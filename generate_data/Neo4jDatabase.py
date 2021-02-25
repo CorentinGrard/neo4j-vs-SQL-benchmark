@@ -1,4 +1,3 @@
-²²²²²²²²²²²²²²# from neo4j import GraphDatabase
 import neo4j
 import json
 from time import time
@@ -73,7 +72,8 @@ class Neo4jDatabase:
                         "UNWIND $props AS row "
                         "MATCH (a:Personne), (b:Produit) "
                         "WHERE a.id = row.idPersonne AND b.id = row.idProduit "
-                        "CREATE (a)-[r:Achat]->(b)", {"props": data[pos:pos + 1000]})))
+                        "CREATE (a)-[r:Achat]->(b)",
+                        {"props": data[pos:pos + 1000]})))
         toc = time()
         print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
 
@@ -93,7 +93,8 @@ class Neo4jDatabase:
                         "UNWIND $props AS row "
                         "MATCH (a:Personne), (b:Personne) "
                         "WHERE a.id = row.idFollower AND b.id = row.idFollowed "
-                        "CREATE (a)-[r:Follow]->(b)", {"props": data[pos:pos + 1000]})))
+                        "CREATE (a)-[r:Follow]->(b)",
+                        {"props": data[pos:pos + 1000]})))
         toc = time()
         print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
 
@@ -112,10 +113,11 @@ class Neo4jDatabase:
                         "idPersonne": idPersonne,
                     })))
         toc = time()
-        # print(result)
+        print(result)
         print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
 
-    def list_achat_products_specific_followers(self, idPersonne, idProduit, profondeur):
+    def list_achat_products_specific_followers(self, idPersonne, idProduit,
+                                               profondeur):
         print("\tNEO4J | list_achat_products_specific_followers")
         tic = time()
         with self.driver.session() as session:
@@ -139,10 +141,11 @@ class Neo4jDatabase:
         with self.driver.session() as session:
             result = session.write_transaction(lambda tx: list(
                 tx.run(
-                    "MATCH (p:Produit{id:1})<-[:Achat]-(a:Personne)<-[:Follow*.."
-                    + str(profondeur) + "]-(b:Personne) "
-                    "WITH DISTINCT b "
-                    "RETURN COUNT(b)", {
+                    "MATCH (:Produit{id:$idProduit})<-[:Achat]-(:Personne)<-[:Follow*.."
+                    + str(profondeur) +
+                    "]-(a:Personne)-[:Achat]->(:Produit{id:$idProduit}) "
+                    "WITH DISTINCT a "
+                    "RETURN COUNT(a)", {
                         "idProduit": idProduit,
                     })))
         toc = time()
