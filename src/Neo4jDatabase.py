@@ -20,6 +20,13 @@ class Neo4jDatabase:
                 lambda tx: list(tx.run("MATCH (n) "
                                        "DETACH DELETE n")))
 
+    def createIndexes(self):
+        with self.driver.session() as session:
+            session.write_transaction(lambda tx: list(
+                tx.run("CREATE INDEX index_personne_id IF NOT EXISTS FOR (n:Personne) ON (n.id)")))
+            session.write_transaction(lambda tx: list(
+                tx.run("CREATE INDEX index_produit_id IF NOT EXISTS FOR (n:Produit) ON (n.id)")))
+
     def createPersonnes(self, personnes):
         print("\tNEO4J | create personne")
         data = []

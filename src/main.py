@@ -19,9 +19,14 @@ if __name__ == "__main__":
     neo4j.clearDatabase()
     postgre.clear_database()
 
+    # Create Indexes
+    neo4j.createIndex()
+
+    # Start timers
     timeStartAll = time()
     timeNeo4j = 0
     timePostgre = 0
+
     # Generate data
     # Generate personnes
     print("---------------------------------------------------------")

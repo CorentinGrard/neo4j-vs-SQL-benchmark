@@ -32,7 +32,8 @@ class PostgreDatabase:
         cur.execute('TRUNCATE produit CASCADE')
         cur.execute('TRUNCATE achat CASCADE')
         cur.execute('TRUNCATE follower CASCADE')
-
+        cur.close()
+         
     def createPersonnes(self, personnes):
         print("\tPOSTGRES | create personne")
         tic = time()
