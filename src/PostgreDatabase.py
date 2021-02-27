@@ -44,7 +44,9 @@ class PostgreDatabase:
         self.driver.commit()
         cur.close()
         toc = time()
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        temps = toc - tic
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
 
     def createProduits(self, produits):
         print("\tPOSTGRES | create produit")
@@ -57,7 +59,9 @@ class PostgreDatabase:
         self.driver.commit()
         cur.close()
         toc = time()
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        temps = toc - tic
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
 
     def createAchats(self, achats):
         print("\tPOSTGRES | create achat")
@@ -70,7 +74,9 @@ class PostgreDatabase:
         self.driver.commit()
         cur.close()
         toc = time()
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        temps = toc - tic
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
 
     def createFollows(self, follows):
         print("\tPOSTGRES | create follow")
@@ -83,7 +89,9 @@ class PostgreDatabase:
         self.driver.commit()
         cur.close()
         toc = time()
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        temps = toc - tic
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
 
     def list_achat_products_followers(self, personneID, depth):
         print("\tPOSTGRES | list_achat_products_followers")
@@ -98,7 +106,9 @@ class PostgreDatabase:
         followers_produit = cur.fetchall()
         cur.close()
         toc = time()
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        temps = toc - tic
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
         return followers_produit
 
     def list_achat_products_specific_followers(self, personneID, idProduit, depth):
@@ -114,7 +124,9 @@ class PostgreDatabase:
         pprint(produit)
         cur.close()
         toc = time()
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        temps = toc - tic
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
         return produit
     
     def list_achat_products_specific_followers(self, personneID, idProduit, depth):
@@ -132,5 +144,7 @@ class PostgreDatabase:
         pprint(produit)
         cur.close()
         toc = time()
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        temps = toc - tic
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
         return produit

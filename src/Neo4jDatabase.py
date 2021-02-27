@@ -36,7 +36,9 @@ class Neo4jDatabase:
                     "UNWIND $props AS map "
                     "CREATE (n:Personne) SET n = map", {"props": data})))
         toc = time()
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        temps = toc - tic
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
 
     def createProduits(self, produits):
         print("\tNEO4J | create produit")
@@ -54,7 +56,9 @@ class Neo4jDatabase:
                     "UNWIND $props AS map "
                     "CREATE (n:Produit) SET n = map", {"props": data})))
         toc = time()
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        temps = toc - tic
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
 
     def createAchats(self, achats):
         print("\tNEO4J | create achat")
@@ -75,7 +79,9 @@ class Neo4jDatabase:
                         "CREATE (a)-[r:Achat]->(b)",
                         {"props": data[pos:pos + 1000]})))
         toc = time()
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        temps = toc - tic
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
 
     def createFollows(self, follows):
         print("\tNEO4J | create follow")
@@ -96,7 +102,9 @@ class Neo4jDatabase:
                         "CREATE (a)-[r:Follow]->(b)",
                         {"props": data[pos:pos + 1000]})))
         toc = time()
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        temps = toc - tic
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
 
     # Search
 
@@ -113,8 +121,10 @@ class Neo4jDatabase:
                         "idPersonne": idPersonne,
                     })))
         toc = time()
+        temps = toc - tic
         print(result)
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
 
     def list_achat_products_specific_followers(self, idPersonne, idProduit,
                                                profondeur):
@@ -132,8 +142,10 @@ class Neo4jDatabase:
                         "idProduit": idProduit,
                     })))
         toc = time()
+        temps = toc - tic
         print(result)
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
 
     def nb_achat_produit(self, idProduit, profondeur):
         print("\tNEO4J | nb_achat_produit")
@@ -149,5 +161,7 @@ class Neo4jDatabase:
                         "idProduit": idProduit,
                     })))
         toc = time()
+        temps = toc - tic
         print(result)
-        print("\t\tTemps d'exécution : " + str(toc - tic) + " s")
+        print("\t\tTemps d'exécution : " + str(temps) + " s")
+        return temps
