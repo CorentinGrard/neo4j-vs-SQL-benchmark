@@ -69,7 +69,8 @@ if __name__ == "__main__":
     print("Temps d'exécution total Neo4j : " + str(timeNeo4j) + " s")
     print("Temps d'exécution total Postgre : " + str(timePostgre) + " s")
     print("Temps d'exécution total : " + str(timeNeo4j + timePostgre) + " s")
-    print("Temps d'exécution total (avec génération ): " + str(timeEndAll - timeStartAll) + " s")
+    print("Temps d'exécution total (avec génération ): " +
+          str(timeEndAll - timeStartAll) + " s")
     print("---------------------------------------------------------")
     # Close sockets
     postgre.close()

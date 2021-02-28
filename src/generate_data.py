@@ -3,6 +3,7 @@ import names
 import random
 from random_word import RandomWords
 
+
 class Personne:
     def __init__(self, id, prenom, nom):
         self.id = id
@@ -16,16 +17,19 @@ class Produit:
         self.nom = nom
         self.prix = prix
 
+
 class Achat:
     def __init__(self, id, idProduit, idPersonne):
         self.id = id
         self.idProduit = idProduit
         self.idPersonne = idPersonne
 
+
 class Follow:
     def __init__(self, idFollower, idFollowed):
         self.idFollower = idFollower
         self.idFollowed = idFollowed
+
 
 def generate_personne(nombrePersonnes):
     personnes = []
@@ -36,6 +40,7 @@ def generate_personne(nombrePersonnes):
         personne = Personne(id, prenom, nom)
         personnes.append(personne)
     return personnes
+
 
 def generate_produit(nombreProduits):
     r = RandomWords()
@@ -49,6 +54,7 @@ def generate_produit(nombreProduits):
         produits.append(produit)
     return produits
 
+
 def generate_achat(personnes, produits, nombreProduits):
     achats = []
     j = 0
@@ -60,6 +66,7 @@ def generate_achat(personnes, produits, nombreProduits):
             j += 1
             achats.append(achat)
     return achats
+
 
 def generate_follow(personnes, nombrePersonnes):
     follows = []
