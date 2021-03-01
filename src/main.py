@@ -9,7 +9,7 @@ from time import time
 
 if __name__ == "__main__":
     nombrePersonnes = 100000
-    nombreProduits = 100000
+    nombreProduits = 10000
 
     # Init connection
     neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     postgre.clear_database()
 
     # Create Indexes
-    neo4j.createIndex()
+    neo4j.createIndexes()
 
     # Start timers
     timeStartAll = time()

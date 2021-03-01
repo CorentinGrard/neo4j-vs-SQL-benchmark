@@ -3,18 +3,21 @@ from PostgreDatabase import PostgreDatabase
 
 
 def list_achat_products_followers():
-    neo4j.list_achat_products_followers(1, 3)
-    postgre.list_achat_products_followers(1, 3)
+    print("---------------------------------------------------------")
+    neo4j.list_achat_products_followers(1, 7)
+    postgre.list_achat_products_followers(1, 7)
 
 
 def list_achat_products_specific_followers():
-    neo4j.list_achat_products_specific_followers(1, 1, 3)
-    postgre.list_achat_products_specific_followers(1, 1, 3)
+    print("---------------------------------------------------------")
+    neo4j.list_achat_products_specific_followers(1, 1, 7)
+    postgre.list_achat_products_specific_followers(1, 1, 7)
 
 
 def nb_achat_produit():
-    neo4j.nb_achat_produit(1, 3)
-    postgre.nb_achat_produit(1, 3)
+    print("---------------------------------------------------------")
+    neo4j.nb_achat_produit(1, 7)
+    postgre.nb_achat_produit(1, 7)
 
 
 # Init connection

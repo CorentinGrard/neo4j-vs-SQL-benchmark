@@ -38,11 +38,12 @@ class PostgreDatabase:
         print("\tPOSTGRES | create personne")
         tic = time()
         cur = self.driver.cursor()
-        for personne in personnes:
-            cur.execute(
-                "INSERT INTO personne (id, first_name, last_name) VALUES(%s, %s, %s)",
-                (personne.id, personne.nom, personne.prenom))
-        self.driver.commit()
+        for pos in range(0, len(personnes), 1000):
+            for personne in personnes[pos:pos + 1000]:
+                cur.execute(
+                    "INSERT INTO personne (id, first_name, last_name) VALUES(%s, %s, %s)",
+                    (personne.id, personne.nom, personne.prenom))
+            self.driver.commit()
         cur.close()
         toc = time()
         temps = toc - tic
@@ -53,11 +54,12 @@ class PostgreDatabase:
         print("\tPOSTGRES | create produit")
         tic = time()
         cur = self.driver.cursor()
-        for produit in produits:
-            cur.execute(
-                "INSERT INTO produit (id_produit, name, price) VALUES(%s, %s, %s)",
-                (produit.id, produit.nom, produit.prix))
-        self.driver.commit()
+        for pos in range(0, len(produits), 1000):
+            for produit in produits[pos:pos + 1000]:
+                cur.execute(
+                    "INSERT INTO produit (id_produit, name, price) VALUES(%s, %s, %s)",
+                    (produit.id, produit.nom, produit.prix))
+            self.driver.commit()
         cur.close()
         toc = time()
         temps = toc - tic
@@ -68,11 +70,12 @@ class PostgreDatabase:
         print("\tPOSTGRES | create achat")
         tic = time()
         cur = self.driver.cursor()
-        for achat in achats:
-            cur.execute(
-                "INSERT INTO achat (id_achat, id_produit, id_personne) VALUES(%s, %s, %s)",
-                (achat.id, achat.idProduit, achat.idPersonne))
-        self.driver.commit()
+        for pos in range(0, len(achats), 1000):
+            for achat in achats[pos:pos + 1000]:
+                cur.execute(
+                    "INSERT INTO achat (id_achat, id_produit, id_personne) VALUES(%s, %s, %s)",
+                    (achat.id, achat.idProduit, achat.idPersonne))
+            self.driver.commit()
         cur.close()
         toc = time()
         temps = toc - tic
@@ -83,11 +86,12 @@ class PostgreDatabase:
         print("\tPOSTGRES | create follow")
         tic = time()
         cur = self.driver.cursor()
-        for follow in follows:
-            cur.execute(
-                "INSERT INTO follower (id_follower, id_followed) VALUES(%s, %s)",
-                (follow.idFollower, follow.idFollowed))
-        self.driver.commit()
+        for pos in range(0, len(achats), 1000):
+            for follow in follows[pos:pos + 1000]:
+                cur.execute(
+                    "INSERT INTO follower (id_follower, id_followed) VALUES(%s, %s)",
+                    (follow.idFollower, follow.idFollowed))
+            self.driver.commit()
         cur.close()
         toc = time()
         temps = toc - tic

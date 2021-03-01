@@ -20,9 +20,9 @@ parser_search.add_argument('-d', '--database', dest='database', help="nom de la 
 parser_gendata =  subparsers.add_parser(
     'gendata', help="détruit la BDD et construit n éléments de produits/personnes")
 parser_gendata.add_argument('-np', '--numberPersonne', dest='number_personne',
-                           help="Nombre de produits/personnes à générer", default=1000, type=int)
+                           help="Nombre de personnes à générer", default=100000, type=int)
 parser_gendata.add_argument('-npr', '--numberProduit', dest='number_produit',
-                           help="Nombre de produits/personnes à générer", default=1000, type=int)
+                           help="Nombre de produits à générer", default=10000, type=int)
 
 
 parser_searchproduct = subparsers.add_parser(
