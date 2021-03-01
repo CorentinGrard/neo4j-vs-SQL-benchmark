@@ -118,7 +118,7 @@ class PostgreDatabase:
         return temps
         return followers_produit
 
-    def list_achat_products_specific_followers(self, personneID, idProduit, depth):
+    def list_achat_products_specific_produits(self, personneID, idProduit, depth):
         print("\tPOSTGRES | list_achat_products_specific_followers")
         request = "SELECT id_followed FROM follower WHERE id_follower = %s"
         for i in range(1, depth):
@@ -138,7 +138,7 @@ class PostgreDatabase:
         return temps
         return produit
 
-    def list_achat_products_specific_followers(self, personneID, idProduit, depth):
+    def viralite(self, personneID, idProduit, depth):
         print("\tPOSTGRES | list_achat_products_specific_followers")
         tic = time()
         cur = self.driver.cursor()
