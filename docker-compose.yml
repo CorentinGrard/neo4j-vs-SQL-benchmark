@@ -28,6 +28,7 @@ services:
       - neo4j-data:/data
     environment:
       - NEO4J_AUTH=neo4j/admin
+      - NEO4J_dbms_memory_pagecache_size=4G
     ports:
       - 7474:7474
       - 7687:7687

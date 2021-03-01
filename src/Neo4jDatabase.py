@@ -116,23 +116,22 @@ class Neo4jDatabase:
 
     # Search
 
-    def list_achat_products_followers(self, idPersonne, profondeur):
-        print("\tNEO4J | list_achat_products_followers")
+    def influenceur(self, idPersonne, profondeur):
+        print("\tNEO4J | influenceur")
         tic = time()
         with self.driver.session() as session:
             result = session.write_transaction(lambda tx: list(
                 tx.run(
-                    "MATCH (a:Personne{id:$idPersonne})-[:Follow*.." + str(
+                    "MATCH (a:Personne{id:$idPersonne})-[:Follow*1.." + str(
                         profondeur) + "]->(b:Personne)-[:Achat]->(p:Produit) "
                     "WITH DISTINCT b, p ORDER BY p.id "
                     "RETURN p.id, COUNT(b)", {
-                        "idPersonne": idPersonne,
+                        "idPersonne": int(idPersonne),
                     })))
         toc = time()
         temps = toc - tic
-        # print(result)
         print("\t\tTemps d'exécution : " + str(temps) + " s")
-        return temps
+        return result
 
     def list_achat_products_specific_produits(self, idPersonne, idProduit,
                                                profondeur):
@@ -141,35 +140,32 @@ class Neo4jDatabase:
         with self.driver.session() as session:
             result = session.write_transaction(lambda tx: list(
                 tx.run(
-                    "MATCH (a:Personne{id:$idPersonne})-[:Follow*.." + str(
+                    "MATCH (a:Personne{id:$idPersonne})-[:Follow*1.." + str(
                         profondeur) +
                     "]->(b:Personne)-[:Achat]->(p:Produit{id:$idProduit}) "
                     "WITH DISTINCT b, p ORDER BY p.id "
                     "RETURN p.id, COUNT(b)", {
-                        "idPersonne": idPersonne,
-                        "idProduit": idProduit,
+                        "idPersonne": int(idPersonne),
+                        "idProduit": int(idProduit),
                     })))
         toc = time()
         temps = toc - tic
-        # print(result)
         print("\t\tTemps d'exécution : " + str(temps) + " s")
-        return temps
+        return result
 
     def viralite(self, idProduit, profondeur):
         print("\tNEO4J | nb_achat_produit")
+        text_depth = profondeur*"(:Personne)<-[:Follow]-"
         tic = time()
         with self.driver.session() as session:
             result = session.write_transaction(lambda tx: list(
                 tx.run(
-                    "MATCH (:Produit{id:$idProduit})<-[:Achat]-(:Personne)<-[:Follow*.."
-                    + str(profondeur) +
-                    "]-(a:Personne)-[:Achat]->(:Produit{id:$idProduit}) "
+                    "MATCH (:Produit{id:$idProduit})<-[:Achat]- "+ text_depth +"(a:Personne)-[:Achat]->(:Produit{id:$idProduit}) "
                     "WITH DISTINCT a "
                     "RETURN COUNT(a)", {
-                        "idProduit": idProduit,
+                        "idProduit": int(idProduit),
                     })))
         toc = time()
         temps = toc - tic
-        # print(result)
         print("\t\tTemps d'exécution : " + str(temps) + " s")
-        return temps
+        return result

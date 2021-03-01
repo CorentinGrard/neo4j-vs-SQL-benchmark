@@ -6,34 +6,34 @@ import names
 import random
 from random_word import RandomWords
 from time import time
+from pprint import pprint
 
 def search(personne_id, depth, database):
-    print('task a', personne_id, depth, database)
     if database == "postgres":
         postgre = PostgreDatabase("database", "admin", "admin", "localhost")
-        followers_produit = postgre.list_achat_products_followers(
+        followers_produit = postgre.influenceur(
             personne_id, depth)
         postgre.close()
-        pprint(followers_produit)
+        # print(followers_produit)
 
     elif database == "neo4j":
         neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
-        followers_produit = neo4j.list_achat_products_followers(
-            personnes_id, depth)
+        followers_produit = neo4j.influenceur(
+            personne_id, depth)
         neo4j.close()
-        pprint(followers_produit)
+        # print(followers_produit)
     elif database == "pg4j":
         postgre = PostgreDatabase("database", "admin", "admin", "localhost")
-        followers_produit = postgre.list_achat_products_followers(
+        followers_produit = postgre.influenceur(
             personne_id, depth)
         postgre.close()
-        pprint(followers_produit)
-       
+        # print(followers_produit)
+        
         neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
-        followers_produit = neo4j.list_achat_products_followers(
-            personnes_id, depth)
+        followers_produit = neo4j.influenceur(
+            personne_id, depth)
         neo4j.close()
-        pprint(followers_produit)
+        # print(followers_produit)
     else:
         print("Invalid database argument")
 
@@ -41,34 +41,48 @@ def search(personne_id, depth, database):
 def searchproduct(personne_id, produit_id,depth, database):
     if database == "postgres":
         postgre = PostgreDatabase("database", "admin", "admin", "localhost")
-        produits = postgre.list_achat_products_specific_produits(personnes_id, produit_id, depth)
+        produits = postgre.list_achat_products_specific_produits(personne_id, produit_id, depth)
         postgre.close()
         pprint(produits)
     elif database == "neo4j":
         neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
-        produits = neo4j.list_achat_products_specific_produits(personnes_id, produit_id, depth)
+        produits = neo4j.list_achat_products_specific_produits(personne_id, produit_id, depth)
         neo4j.close()
         pprint(produits)
     elif database == "pg4j":
         postgre = PostgreDatabase("database", "admin", "admin", "localhost")
-        produits = postgre.list_achat_products_specific_produits(personnes_id, produit_id, depth)
+        produits = postgre.list_achat_products_specific_produits(personne_id, produit_id, depth)
         postgre.close()
         pprint(produits)
         
         neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
-        produits = neo4j.list_achat_products_specific_produits(personnes_id, produit_id, depth)
+        produits = neo4j.list_achat_products_specific_produits(personne_id, produit_id, depth)
         neo4j.close()
-        pprint(produit)
+        pprint(produits)
     else:
         print("Invalid database argument")
 
-def circle(produit_id, depth, database):
+def viralite(produit_id, depth, database):
     if database == "postgres":
-        print("Invalid database argument")
+        postgre = PostgreDatabase("database", "admin", "admin", "localhost")
+        viralite = postgre.viralite(produit_id, depth)
+        postgre.close()
+        print(viralite)
     elif database == "neo4j":
-        print("Invalid database argument")
+        neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin") 
+        viralite = neo4j.viralite(produit_id, depth)
+        neo4j.close()
+        print(viralite)
     elif database == "pg4j":
-        print("Invalid database argument")
+        postgre = PostgreDatabase("database", "admin", "admin", "localhost")
+        viralite = postgre.viralite(produit_id, depth)
+        postgre.close()
+        print(viralite)
+
+        neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin") 
+        viralite = neo4j.viralite(produit_id, depth)
+        neo4j.close()
+        print(viralite)
     else:
         print("Invalid database argument")
 
@@ -105,7 +119,7 @@ def gendata(number_personne, number_produit):
     print("Génération des personnes - DONE")
 
     timeNeo4j += neo4j.createPersonnes(personnes)
-    timePostgre += postgre.createPersonnes(personnes)
+    # timePostgre += postgre.createPersonnes(personnes)
 
     # Generate produits
     print("---------------------------------------------------------")
@@ -119,7 +133,7 @@ def gendata(number_personne, number_produit):
     print("Génération des produits - DONE")
 
     timeNeo4j += neo4j.createProduits(produits)
-    timePostgre += postgre.createProduits(produits)
+    # timePostgre += postgre.createProduits(produits)
 
     # Generate achats
     print("---------------------------------------------------------")
@@ -133,7 +147,7 @@ def gendata(number_personne, number_produit):
     print("Génération des achats - DONE")
 
     timeNeo4j += neo4j.createAchats(achats)
-    timePostgre += postgre.createAchats(achats)
+    # timePostgre += postgre.createAchats(achats)
 
     # Generate follows
     print("---------------------------------------------------------")
@@ -147,7 +161,7 @@ def gendata(number_personne, number_produit):
     print("Génération des follows - DONE")
 
     timeNeo4j += neo4j.createFollows(follows)
-    timePostgre += postgre.createFollows(follows)
+    # timePostgre += postgre.createFollows(follows)
 
     timeEndAll = time()
     print("---------------------------------------------------------")

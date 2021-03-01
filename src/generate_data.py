@@ -1,5 +1,5 @@
 import json
-import names
+import string
 import random
 from random_word import RandomWords
 
@@ -35,8 +35,8 @@ def generate_personne(nombrePersonnes):
     personnes = []
     for i in range(0, nombrePersonnes):
         id = i
-        prenom = names.get_first_name()
-        nom = names.get_last_name()
+        prenom = ''.join(random.choices(string.ascii_uppercase, k=6))
+        nom = ''.join(random.choices(string.ascii_uppercase, k=5))
         personne = Personne(id, prenom, nom)
         personnes.append(personne)
     return personnes

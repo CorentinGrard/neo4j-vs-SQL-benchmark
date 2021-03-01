@@ -1,6 +1,5 @@
 import psycopg2
 from time import time
-from pprint import pprint
 
 
 class PostgreDatabase:
@@ -98,8 +97,8 @@ class PostgreDatabase:
         print("\t\tTemps d'exécution : " + str(temps) + " s")
         return temps
 
-    def list_achat_products_followers(self, personneID, depth):
-        print("\tPOSTGRES | list_achat_products_followers")
+    def influenceur(self, personneID, depth):
+        print("\tPOSTGRES | influenceur")
 
         request = "SELECT id_followed FROM follower WHERE id_follower = %s"
         for i in range(1, depth):
@@ -115,7 +114,6 @@ class PostgreDatabase:
         toc = time()
         temps = toc - tic
         print("\t\tTemps d'exécution : " + str(temps) + " s")
-        return temps
         return followers_produit
 
     def list_achat_products_specific_produits(self, personneID, idProduit, depth):
@@ -130,32 +128,26 @@ class PostgreDatabase:
         cur = self.driver.cursor()
         cur.execute(request, (idProduit, personneID,))
         produit = cur.fetchall()
-        pprint(produit)
         cur.close()
         toc = time()
         temps = toc - tic
         print("\t\tTemps d'exécution : " + str(temps) + " s")
-        return temps
         return produit
 
-    def viralite(self, personneID, idProduit, depth):
+    def viralite(self, idProduit, depth):
         print("\tPOSTGRES | list_achat_products_specific_followers")
-        tic = time()
         cur = self.driver.cursor()
-
-        request = "SELECT id_followed FROM follower WHERE id_follower = %s"
-        for i in range(1, depth):
-            request = "SELECT DISTINCT id_followed FROM follower WHERE id_follower IN (" + \
+        request = "SELECT DISTINCT id_personne FROM Achat WHERE id_produit=%s"
+        for i in range(1, depth+1):
+            request = "SELECT DISTINCT id_follower FROM Follower WHERE id_followed IN (" + \
                 request + ")"
-        request = "SELECT id_produit, count(id_produit) FROM achat WHERE id_produit = %s and id_personne IN (" + \
-            request + ") GROUP BY id_produit"
-
-        cur.execute(request, (idProduit, personneID,))
-        produit = cur.fetchall()
-        pprint(produit)
-        cur.close()
+        request = "SELECT COUNT(id_personne) FROM Achat WHERE id_produit=%s AND id_personne IN (" + \
+            request + ")"
+        tic = time()
+        cur.execute(request, (idProduit, idProduit,))
+        viralite = cur.fetchall()
         toc = time()
+        cur.close()
         temps = toc - tic
         print("\t\tTemps d'exécution : " + str(temps) + " s")
-        return temps
-        return produit
+        return viralite

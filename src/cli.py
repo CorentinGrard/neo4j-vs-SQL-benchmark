@@ -38,13 +38,13 @@ parser_searchproduct.add_argument('-d', '--database', dest='database', help="nom
 
 
 
-parser_circle = subparsers.add_parser(
-    'circle', help="Observe le rôle d'influenceur d'un individu suite à un post mentionnant un article")
-parser_circle.add_argument('-prid', '--produitid', dest='produit_id',
+parser_viralite = subparsers.add_parser(
+    'viralite', help="Observe le rôle d'influenceur d'un individu suite à un post mentionnant un article")
+parser_viralite.add_argument('-prid', '--produitid', dest='produit_id',
                            help="ID du produit", type=str)
-parser_circle.add_argument('-de', '--depth', dest='depth',
+parser_viralite.add_argument('-de', '--depth', dest='depth',
                            help="Profondeur de la recherche", default=1, type=int) 
-parser_circle.add_argument('-d', '--database', dest='database', help="nom de la database",
+parser_viralite.add_argument('-d', '--database', dest='database', help="nom de la database",
                            type=str, choices=['postgres', 'neo4j', 'pg4j'], default="pg4j")
 
 
