@@ -90,6 +90,7 @@ def gendata(number_personne, number_produit):
     timeStartAll = time()
     timeNeo4j = 0
     timePostgre = 0
+    timeGenerate = 0
 
     # Generate data
     # Generate personnes
@@ -99,7 +100,8 @@ def gendata(number_personne, number_produit):
     personnes = generate_personne(number_personne)
     toc = time()
     temps = toc - tic
-    print("\t\tTemps d'exécution : " + str(temps) + " s")
+    timeGenerate += temps
+    print("\tTemps d'exécution : " + str(temps) + " s")
     print("Génération des personnes - DONE")
 
     timeNeo4j += neo4j.createPersonnes(personnes)
@@ -112,7 +114,8 @@ def gendata(number_personne, number_produit):
     produits = generate_produit(number_produit)
     toc = time()
     temps = toc - tic
-    print("\t\tTemps d'exécution : " + str(temps) + " s")
+    timeGenerate += temps
+    print("\tTemps d'exécution : " + str(temps) + " s")
     print("Génération des produits - DONE")
 
     timeNeo4j += neo4j.createProduits(produits)
@@ -125,7 +128,8 @@ def gendata(number_personne, number_produit):
     achats = generate_achat(personnes, produits, number_produit)
     toc = time()
     temps = toc - tic
-    print("\t\tTemps d'exécution : " + str(temps) + " s")
+    timeGenerate += temps
+    print("\tTemps d'exécution : " + str(temps) + " s")
     print("Génération des achats - DONE")
 
     timeNeo4j += neo4j.createAchats(achats)
@@ -138,7 +142,8 @@ def gendata(number_personne, number_produit):
     follows = generate_follow(personnes, number_personne)
     toc = time()
     temps = toc - tic
-    print("\t\tTemps d'exécution : " + str(temps) + " s")
+    timeGenerate += temps
+    print("\tTemps d'exécution : " + str(temps) + " s")
     print("Génération des follows - DONE")
 
     timeNeo4j += neo4j.createFollows(follows)
@@ -146,6 +151,7 @@ def gendata(number_personne, number_produit):
 
     timeEndAll = time()
     print("---------------------------------------------------------")
+    print("Temps de generation : " + str(timeGenerate) + " s")
     print("Temps d'exécution total Neo4j : " + str(timeNeo4j) + " s")
     print("Temps d'exécution total Postgre : " + str(timePostgre) + " s")
     print("Temps d'exécution total : " + str(timeNeo4j + timePostgre) + " s")

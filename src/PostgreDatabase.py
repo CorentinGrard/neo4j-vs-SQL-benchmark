@@ -86,7 +86,7 @@ class PostgreDatabase:
         print("\tPOSTGRES | create follow")
         tic = time()
         cur = self.driver.cursor()
-        for pos in range(0, len(achats), 1000):
+        for pos in range(0, len(follows), 1000):
             for follow in follows[pos:pos + 1000]:
                 cur.execute(
                     "INSERT INTO follower (id_follower, id_followed) VALUES(%s, %s)",
