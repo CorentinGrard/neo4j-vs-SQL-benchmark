@@ -2,36 +2,7 @@ import argparse
 from pprint import pprint
 from Neo4jDatabase import Neo4jDatabase
 from PostgreDatabase import PostgreDatabase
-
-
-def search(personne_id, depth, database):
-    print('task a', personne_id, depth, database)
-    if database == "postgres":
-        postgre = PostgreDatabase("database", "admin", "admin", "localhost")
-        followers_produit = postgre.list_achat_products_followers(
-            personne_id, depth)
-        postgre.close()
-        pprint(followers_produit)
-
-    elif database == "neo4j":
-        neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
-        neo4j.close()
-    elif database == "pg4j":
-        postgre = PostgreDatabase("database", "admin", "admin", "localhost")
-        followers_produit = postgre.list_achat_products_followers(
-            personne_id, depth)
-        postgre.close()
-        pprint(followers_produit)
-
-        neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
-        neo4j.close()
-    else:
-        print("Invalid database argument")
-
-
-def add_user(beta):
-    print('', beta)
-
+from cli_func import *
 
 parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(dest='subparser')
@@ -44,6 +15,37 @@ parser_search.add_argument('-de', '--depth', dest='depth',
                            help="Profondeur de la recherche", default=1, type=int)
 parser_search.add_argument('-d', '--database', dest='database', help="nom de la database",
                            type=str, choices=['postgres', 'neo4j', 'pg4j'], default="pg4j")
+
+
+parser_gendata =  subparsers.add_parser(
+    'gendata', help="détruit la BDD et construit n éléments de produits/personnes")
+parser_gendata.add_argument('-n', '--number', dest='number',
+                           help="Nombre de produits/personnes à générer", default=1000, type=int)
+
+
+parser_searchproduct = subparsers.add_parser(
+    'searchproduct', help="Permet de rechercher les produits viraux jusqu'à profonder de")
+parser_searchproduct.add_argument('-pid', '--personneid', dest='personne_id',
+                           help="ID de la personne recherché", type=str)
+parser_searchproduct.add_argument('-prid', '--produitid', dest='produit_id',
+                           help="ID du produit", type=str)
+parser_searchproduct.add_argument('-de', '--depth', dest='depth',
+                           help="Profondeur de la recherche", default=1, type=int) 
+parser_searchproduct.add_argument('-d', '--database', dest='database', help="nom de la database",
+                           type=str, choices=['postgres', 'neo4j', 'pg4j'], default="pg4j")
+
+
+
+parser_circle = subparsers.add_parser(
+    'circle', help="Observe le rôle d'influenceur d'un individu suite à un post mentionnant un article")
+parser_circle.add_argument('-prid', '--produitid', dest='produit_id',
+                           help="ID du produit", type=str)
+parser_circle.add_argument('-de', '--depth', dest='depth',
+                           help="Profondeur de la recherche", default=1, type=int) 
+parser_circle.add_argument('-d', '--database', dest='database', help="nom de la database",
+                           type=str, choices=['postgres', 'neo4j', 'pg4j'], default="pg4j")
+
+
 
 
 kwargs = vars(parser.parse_args())
