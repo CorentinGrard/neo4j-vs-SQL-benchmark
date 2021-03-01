@@ -16,7 +16,7 @@ parser_search.add_argument('-de', '--depth', dest='depth',
 parser_search.add_argument('-d', '--database', dest='database', help="nom de la database",
                            type=str, choices=['postgres', 'neo4j', 'pg4j'], default="pg4j")
 
-
+*
 parser_gendata =  subparsers.add_parser(
     'gendata', help="détruit la BDD et construit n éléments de produits/personnes")
 parser_gendata.add_argument('-n', '--number', dest='number',
