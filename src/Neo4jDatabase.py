@@ -133,7 +133,7 @@ class Neo4jDatabase:
         print("\t\tTemps d'exécution : " + str(temps) + " s")
         return temps
 
-    def list_achat_products_specific_followers(self, idPersonne, idProduit,
+    def list_achat_products_specific_produits(self, idPersonne, idProduit,
                                                profondeur):
         print("\tNEO4J | list_achat_products_specific_followers")
         tic = time()
@@ -154,7 +154,7 @@ class Neo4jDatabase:
         print("\t\tTemps d'exécution : " + str(temps) + " s")
         return temps
 
-    def nb_achat_produit(self, idProduit, profondeur):
+    def viralite(self, idProduit, profondeur):
         print("\tNEO4J | nb_achat_produit")
         tic = time()
         with self.driver.session() as session:
