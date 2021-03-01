@@ -1,0 +1,38 @@
+Neo4j connected
+Connecting to the PostgreSQL database...
+---------------------------------------------------------
+Génération des personnes....
+Génération des personnes - DONE
+        NEO4J | create personne
+                Temps d'exécution : 13.846988916397095 s
+        POSTGRES | create personne
+                Temps d'exécution : 212.4242820739746 s
+---------------------------------------------------------
+Génération des produits....
+Génération des produits - DONE
+        NEO4J | create produit
+                Temps d'exécution : 0.9081640243530273 s
+        POSTGRES | create produit
+                Temps d'exécution : 23.834118843078613 s
+---------------------------------------------------------
+Génération des achats....
+Génération des achats - DONE
+        NEO4J | create achat
+                Temps d'exécution : 24.31582999229431 s
+        POSTGRES | create achat
+                Temps d'exécution : 519.6587119102478 s
+---------------------------------------------------------
+Génération des follows....
+Génération des follows - DONE
+        NEO4J | create follow
+                Temps d'exécution : 121.59368896484375 s
+        POSTGRES | create follow
+                Temps d'exécution : 1954.7102761268616 s
+---------------------------------------------------------
+Temps d'exécution total Neo4j : 160.66467189788818 s
+Temps d'exécution total Postgre : 2710.6273889541626 s
+Temps d'exécution total : 2871.292060852051 s
+Temps d'exécution total (avec génération ): 3391.894870996475 s
+---------------------------------------------------------
+Database Postgre connection closed.
+Neo4j closed

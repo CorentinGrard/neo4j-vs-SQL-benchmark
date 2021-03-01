@@ -64,15 +64,16 @@ def searchproduct(personne_id, produit_id,depth, database):
 
 def circle(produit_id, depth, database):
     if database == "postgres":
+        print("Invalid database argument")
     elif database == "neo4j":
+        print("Invalid database argument")
     elif database == "pg4j":
+        print("Invalid database argument")
     else:
         print("Invalid database argument")
 
 
 def gendata(number_personne, number_produit):
-    nombrePersonnes = 100000
-    nombreProduits = 100000
 
     # Init connection
     neo4j = Neo4jDatabase("bolt://localhost:7687", "neo4j", "admin")
@@ -83,7 +84,7 @@ def gendata(number_personne, number_produit):
     postgre.clear_database()
 
     # Create Indexes
-    neo4j.createIndex()
+    neo4j.createIndexes()
 
     # Start timers
     timeStartAll = time()
@@ -94,7 +95,11 @@ def gendata(number_personne, number_produit):
     # Generate personnes
     print("---------------------------------------------------------")
     print("Génération des personnes....")
-    personnes = generate_personne(nombrePersonnes)
+    tic = time()
+    personnes = generate_personne(number_personne)
+    toc = time()
+    temps = toc - tic
+    print("\t\tTemps d'exécution : " + str(temps) + " s")
     print("Génération des personnes - DONE")
 
     timeNeo4j += neo4j.createPersonnes(personnes)
@@ -103,7 +108,11 @@ def gendata(number_personne, number_produit):
     # Generate produits
     print("---------------------------------------------------------")
     print("Génération des produits....")
-    produits = generate_produit(nombreProduits)
+    tic = time()
+    produits = generate_produit(number_produit)
+    toc = time()
+    temps = toc - tic
+    print("\t\tTemps d'exécution : " + str(temps) + " s")
     print("Génération des produits - DONE")
 
     timeNeo4j += neo4j.createProduits(produits)
@@ -112,7 +121,11 @@ def gendata(number_personne, number_produit):
     # Generate achats
     print("---------------------------------------------------------")
     print("Génération des achats....")
-    achats = generate_achat(personnes, produits, nombreProduits)
+    tic = time()
+    achats = generate_achat(personnes, produits, number_produit)
+    toc = time()
+    temps = toc - tic
+    print("\t\tTemps d'exécution : " + str(temps) + " s")
     print("Génération des achats - DONE")
 
     timeNeo4j += neo4j.createAchats(achats)
@@ -121,7 +134,11 @@ def gendata(number_personne, number_produit):
     # Generate follows
     print("---------------------------------------------------------")
     print("Génération des follows....")
-    follows = generate_follow(personnes, nombrePersonnes)
+    tic = time()
+    follows = generate_follow(personnes, number_personne)
+    toc = time()
+    temps = toc - tic
+    print("\t\tTemps d'exécution : " + str(temps) + " s")
     print("Génération des follows - DONE")
 
     timeNeo4j += neo4j.createFollows(follows)

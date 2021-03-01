@@ -17,8 +17,7 @@ class Neo4jDatabase:
     def clearDatabase(self):
         with self.driver.session() as session:
             session.write_transaction(
-                lambda tx: list(tx.run("MATCH (n) "
-                                       "DETACH DELETE n")))
+                lambda tx: list(tx.run("MATCH (n) DETACH DELETE n")))
 
     def createIndexes(self):
         with self.driver.session() as session:
@@ -37,11 +36,12 @@ class Neo4jDatabase:
                 "nom": personne.nom
             })
         tic = time()
-        with self.driver.session() as session:
-            session.write_transaction(lambda tx: list(
-                tx.run(
-                    "UNWIND $props AS map "
-                    "CREATE (n:Personne) SET n = map", {"props": data})))
+        for pos in range(0, len(data), 1000):
+            with self.driver.session() as session:
+                session.write_transaction(lambda tx: list(
+                    tx.run(
+                        "UNWIND $props AS map "
+                        "CREATE (n:Personne) SET n = map", {"props": data[pos:pos + 1000]})))
         toc = time()
         temps = toc - tic
         print("\t\tTemps d'exécution : " + str(temps) + " s")
@@ -57,11 +57,12 @@ class Neo4jDatabase:
                 "nom": produit.nom
             })
         tic = time()
-        with self.driver.session() as session:
-            session.write_transaction(lambda tx: list(
-                tx.run(
-                    "UNWIND $props AS map "
-                    "CREATE (n:Produit) SET n = map", {"props": data})))
+        for pos in range(0, len(data), 1000):
+            with self.driver.session() as session:
+                session.write_transaction(lambda tx: list(
+                    tx.run(
+                        "UNWIND $props AS map "
+                        "CREATE (n:Produit) SET n = map", {"props": data[pos:pos + 1000]})))
         toc = time()
         temps = toc - tic
         print("\t\tTemps d'exécution : " + str(temps) + " s")
@@ -129,7 +130,7 @@ class Neo4jDatabase:
                     })))
         toc = time()
         temps = toc - tic
-        print(result)
+        # print(result)
         print("\t\tTemps d'exécution : " + str(temps) + " s")
         return temps
 
@@ -150,7 +151,7 @@ class Neo4jDatabase:
                     })))
         toc = time()
         temps = toc - tic
-        print(result)
+        # print(result)
         print("\t\tTemps d'exécution : " + str(temps) + " s")
         return temps
 
@@ -169,6 +170,6 @@ class Neo4jDatabase:
                     })))
         toc = time()
         temps = toc - tic
-        print(result)
+        # print(result)
         print("\t\tTemps d'exécution : " + str(temps) + " s")
         return temps
