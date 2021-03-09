@@ -15,7 +15,7 @@ python3 cli.py -h
 
 ### Liste des commabdes
 
-Génération des données :
+Génération des données, voir les arguments nécessaires :
 ```
 python3 cli.py gendata -h
 ```
