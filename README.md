@@ -13,7 +13,7 @@ Listez les différentes commandes :
 python3 cli.py -h
 ```
 
-### Liste des commabdes
+### Liste des commandes
 
 Génération des données, voir les arguments nécessaires :
 ```
